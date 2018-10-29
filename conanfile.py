@@ -40,7 +40,7 @@ class LibnameConan(ConanFile):
         self.run("cd %s" % self._source_subfolder)
         self.run("git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20") # checkout latest Commit
 
-   def _configure_cmake(self):
+   def configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(build_folder=self._build_subfolder)
