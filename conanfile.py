@@ -5,7 +5,7 @@ from conans import ConanFile, CMake, tools
 import os
 
 
-class LibnameConan(ConanFile):
+class socketio(ConanFile):
     name = "socket.io++"
     version = "1.6.0"
     description = "C++11 implementation of Socket.IO client"
@@ -40,14 +40,14 @@ class LibnameConan(ConanFile):
         self.run("cd %s" % self._source_subfolder)
         self.run("git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20") # checkout latest Commit
 
-   def configure_cmake(self):
+    def configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
     def build(self):
-        cmake = self._configure_cmake()
+        cmake = self.configure_cmake()
         cmake.build()
 
     def package(self):
