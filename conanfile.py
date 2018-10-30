@@ -36,9 +36,8 @@ class socketio(ConanFile):
     )
 
     def source(self):
-        self.run("git clone self.homepage --depth 1 %s" % self._source_subfolder)
-        self.run("cd %s" % self._source_subfolder)
-        self.run("git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20") # checkout latest Commit
+        self.run("git clone %s %s" % (self.homepage, self._source_subfolder))
+        self.run("cd %s && git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20" % self._source_subfolder) # checkout latest Commit
 
     def configure_cmake(self):
         cmake = CMake(self)
