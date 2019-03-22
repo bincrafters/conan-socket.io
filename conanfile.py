@@ -5,9 +5,9 @@ from conans import ConanFile, CMake, tools
 import os
 
 
-class LibnameConan(ConanFile):
+class socketio(ConanFile):
     name = "socket.io++"
-    version = "1.6.0"
+    version = "1.6.1"
     description = "C++11 implementation of Socket.IO client"
     topics = ["conan", "libname", "socket.io", "socket", "c++"]
     url = "https://github.com/bincrafters/conan-socket.io"
@@ -36,27 +36,26 @@ class LibnameConan(ConanFile):
     )
 
     def source(self):
-        self.run("git clone self.homepage --depth 1 %s" % self._source_subfolder)
-        self.run("cd %s" % self._source_subfolder)
-        self.run("git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20") # checkout latest Commit
+        self.run("git clone --recurse-submodules %s %s" % (self.homepage, self._source_subfolder))
+        self.run("cd %s && git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20" % self._source_subfolder) # checkout latest Commit
 
-   def _configure_cmake(self):
+    def configure_cmake(self):
         cmake = CMake(self)
-        cmake.definitions["BUILD_TESTS"] = False  # example
+        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
     def build(self):
-        cmake = self._configure_cmake()
+        cmake = self.configure_cmake()
         cmake.build()
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
-        # If the CMakeLists.txt has a proper install method, the steps below may be redundant
-        # If so, you can just remove the lines below
+
         include_folder = os.path.join(self._source_subfolder, "include")
+
         self.copy(pattern="*", dst="include", src=include_folder)
         self.copy(pattern="*.dll", dst="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", keep_path=False)
