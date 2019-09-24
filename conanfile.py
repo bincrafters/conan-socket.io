@@ -9,7 +9,7 @@ class socketio(ConanFile):
     name = "socket.io++"
     version = "1.6.1"
     description = "C++11 implementation of Socket.IO client"
-    topics = ["conan", "libname", "socket.io", "socket", "c++"]
+    topics = ("conan", "libname", "socket.io", "socket", "c++")
     url = "https://github.com/bincrafters/conan-socket.io"
     homepage = "https://github.com/socketio/socket.io-client-cpp"
     author = "Bincrafters <bincrafters@gmail.com>"
@@ -39,14 +39,14 @@ class socketio(ConanFile):
         self.run("git clone --recurse-submodules %s %s" % (self.homepage, self._source_subfolder))
         self.run("cd %s && git checkout 6063cb1d612f6ca0232d4134a018053fb8faea20" % self._source_subfolder) # checkout latest Commit
 
-    def configure_cmake(self):
+    def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
     def build(self):
-        cmake = self.configure_cmake()
+        cmake = self._configure_cmake()
         cmake.build()
 
     def package(self):
